@@ -123,7 +123,7 @@
 				$inner = $article.querySelector('.inner'),
 				$img = $article.querySelector('img'),
 				$header = $article.querySelector('header'),
-				$a = $article.querySelectorAll('.image.main, header .meta, header > *, .content > *');
+				$a = $article.querySelectorAll('.image.main, header .meta, header > *, .content > *, h2.major, .education-item, .experience-item, .skills-section');
 
 			// Lock.
 				if (!lock())
@@ -135,12 +135,18 @@
 			// Set article's active state.
 				$article.classList.add('active');
 
-			// Hide header elements.
-				$a.forEach(function($el) {
-					$el.style.transition = '';
-					$el.style.opacity = 0;
-					$el.style.transform = 'translateY(-1em)';
-				});
+			// Hide all article content elements.
+				if ($a.length > 0) {
+					$a.forEach(function($el) {
+						$el.style.transition = '';
+						$el.style.opacity = 0;
+						$el.style.transform = 'translateY(-1em)';
+					});
+				} else {
+					// Fallback: hide entire article content
+					$article.style.opacity = 0;
+					$article.style.transform = 'translateY(-1em)';
+				}
 
 			// Show image.
 				if ($img) {
@@ -157,14 +163,21 @@
 							$img.style.opacity = 1;
 						}
 
-					// Fade in and slide down header elements.
-						$a.forEach(function($el, i) {
-							window.setTimeout(function() {
-								$el.style.transition = 'opacity 500ms ease-out, transform 500ms ease-out';
-								$el.style.opacity = 1;
-								$el.style.transform = 'translateY(0)';
-							}, i * 25);
-						});
+					// Fade in and slide down all elements.
+						if ($a.length > 0) {
+							$a.forEach(function($el, i) {
+								window.setTimeout(function() {
+									$el.style.transition = 'opacity 500ms ease-out, transform 500ms ease-out';
+									$el.style.opacity = 1;
+									$el.style.transform = 'translateY(0)';
+								}, i * 25);
+							});
+						} else {
+							// Fallback: show entire article
+							$article.style.transition = 'opacity 500ms ease-out, transform 500ms ease-out';
+							$article.style.opacity = 1;
+							$article.style.transform = 'translateY(0)';
+						}
 
 					// Unlock after a bit more.
 						window.setTimeout(function() {
@@ -181,6 +194,15 @@
 			window.addEventListener('load', function() {
 				window.setTimeout(function() {
 					$body.classList.remove('is-preload');
+					
+					// Handle initial hash if present
+					if (window.location.hash) {
+						var hash = window.location.hash.substring(1);
+						var $article = document.getElementById(hash);
+						if ($article) {
+							showArticle($article);
+						}
+					}
 				}, 100);
 			});
 
@@ -193,7 +215,11 @@
 						href = $this.getAttribute('href');
 
 					// External link? Bail.
-						if (href.substring(0, 4) == 'http' || href.substring(0, 5) == 'https' || href.substring(0, 7) == 'mailto:')
+						if (!href || href.substring(0, 4) == 'http' || href.substring(0, 5) == 'https' || href.substring(0, 7) == 'mailto:')
+							return;
+
+					// Must be a hash link.
+						if (href.charAt(0) != '#')
 							return;
 
 					// Prevent default for hash links.
@@ -205,11 +231,14 @@
 							return false;
 
 					// Get target article.
-						var	$article = document.getElementById(href.substring(1));
+						var	hash = href.substring(1);
+						var	$article = document.getElementById(hash);
 
 					// No article? Bail.
-						if (!$article)
+						if (!$article) {
+							console.log('Article not found:', hash);
 							return;
+						}
 
 					// Hide header.
 						$header.style.transition = 'opacity 325ms ease-in-out';
@@ -219,19 +248,22 @@
 						window.setTimeout(function() {
 
 							// Show article.
-								showArticle($article);
+							showArticle($article);
+
+							// Update URL hash.
+							window.location.hash = hash;
 
 							// Scroll to top.
-								window.scrollTo(0, 0);
+							window.scrollTo(0, 0);
 
 							// Wait a bit.
-								window.setTimeout(function() {
+							window.setTimeout(function() {
 
-									// Unlock header.
-										$header.style.transition = '';
-										$header.style.opacity = 1;
+								// Unlock header.
+								$header.style.transition = '';
+								$header.style.opacity = 1;
 
-								}, 325);
+							}, 325);
 
 						}, 250);
 
@@ -247,11 +279,29 @@
 
 				if ($article) {
 
-					// Reset scroll.
-						window.scrollTo(0, 0);
+					// Hide header.
+						$header.style.transition = 'opacity 325ms ease-in-out';
+						$header.style.opacity = 0;
 
-					// Show article.
-						showArticle($article);
+					// Wait for it to hide.
+						window.setTimeout(function() {
+
+							// Reset scroll.
+								window.scrollTo(0, 0);
+
+							// Show article.
+								showArticle($article);
+
+							// Wait a bit.
+								window.setTimeout(function() {
+
+									// Unlock header.
+										$header.style.transition = '';
+										$header.style.opacity = 1;
+
+								}, 325);
+
+						}, 250);
 
 				}
 

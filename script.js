@@ -129,6 +129,20 @@
 				if (!lock())
 					return false;
 
+			// Hide all other articles first
+				var $allArticles = $main.querySelectorAll('article');
+				$allArticles.forEach(function($art) {
+					if ($art !== $article) {
+						$art.classList.remove('active');
+						$art.style.display = 'none';
+						$art.style.opacity = '0';
+					}
+				});
+
+			// Show the target article
+				$article.style.display = 'block';
+				$article.style.opacity = '1';
+
 			// Clear main.
 				$main.style.opacity = 1;
 
@@ -239,6 +253,7 @@
 							console.log('Article not found:', hash);
 							return;
 						}
+
 
 					// Hide header.
 						$header.style.transition = 'opacity 325ms ease-in-out';

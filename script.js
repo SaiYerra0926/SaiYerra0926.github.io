@@ -193,10 +193,10 @@
 						href = $this.getAttribute('href');
 
 					// External link? Bail.
-						if (href.substring(0, 4) == 'http' || href.substring(0, 5) == 'https' || href.substring(0, 1) == '#')
+						if (href.substring(0, 4) == 'http' || href.substring(0, 5) == 'https' || href.substring(0, 7) == 'mailto:')
 							return;
 
-					// Prevent default.
+					// Prevent default for hash links.
 						event.preventDefault();
 						event.stopPropagation();
 

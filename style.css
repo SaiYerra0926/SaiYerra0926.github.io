@@ -244,29 +244,7 @@ pre code {
 }
 
 #header .logo {
-	-moz-transition: -moz-transform 0.5s ease, opacity 0.5s ease;
-	-webkit-transition: -webkit-transform 0.5s ease, opacity 0.5s ease;
-	-ms-transition: -ms-transform 0.5s ease, opacity 0.5s ease;
-	transition: transform 0.5s ease, opacity 0.5s ease;
-	-moz-transform: translateY(0);
-	-webkit-transform: translateY(0);
-	-ms-transform: translateY(0);
-	transform: translateY(0);
-	border: solid 1px #fff;
-	border-radius: 100%;
-	display: inline-block;
-	font-size: 2em;
-	height: 2.25em;
-	line-height: 2.25em;
-	margin-bottom: 1em;
-	opacity: 1;
-	text-align: center;
-	width: 2.25em;
-}
-
-#header .logo .icon {
-	color: #fff;
-	font-size: 1em;
+	display: none;
 }
 
 #header .content {
@@ -627,30 +605,74 @@ article h2.major:after {
 /* Education Items */
 .education-item {
 	margin-bottom: 3em;
-	padding-bottom: 2em;
+	padding-bottom: 2.5em;
 	border-bottom: solid 1px rgba(160, 160, 160, 0.2);
+	display: flex;
+	align-items: flex-start;
+	gap: 1.5em;
 }
 
 .education-item:last-child {
 	border-bottom: none;
 }
 
-.education-item h3 {
-	color: #348cb2;
-	font-size: 1.5em;
+.education-icon-wrapper {
+	flex-shrink: 0;
+	margin-top: 0.3em;
+}
+
+.education-icon {
+	color: #667eea;
+	font-size: 1.8em;
+}
+
+.education-content-wrapper {
+	flex: 1;
+}
+
+.education-degree {
+	color: #333;
+	font-size: 1.4em;
+	font-weight: 600;
 	margin-bottom: 0.5em;
+	line-height: 1.4;
+	text-transform: none;
+	letter-spacing: normal;
+}
+
+.education-date-inline {
+	color: #666;
+	font-weight: 400;
+	font-size: 0.9em;
 }
 
 .education-item .institution {
-	font-weight: 600;
-	color: #333;
-	font-size: 1.1em;
-	margin-bottom: 0.3em;
+	font-weight: 400;
+	color: #666;
+	font-size: 1em;
+	margin-bottom: 0.8em;
+	letter-spacing: normal;
+	text-transform: none;
+}
+
+.education-focus {
+	color: #555;
+	font-style: italic;
+	margin-bottom: 0.8em;
+	line-height: 1.6;
+}
+
+.education-description {
+	color: #555;
+	font-style: italic;
+	margin-bottom: 0;
+	line-height: 1.6;
 }
 
 .education-item .date {
 	color: #666;
 	font-style: italic;
+	display: none;
 }
 
 /* Skills Section */
@@ -742,6 +764,15 @@ article h2.major:after {
 		width: 100%;
 		height: 100%;
 	}
+
+	.education-item {
+		flex-direction: row;
+		gap: 1.5em;
+	}
+
+	.education-degree {
+		font-size: 1.3em;
+	}
 }
 
 @media screen and (max-width: 736px) {
@@ -826,6 +857,19 @@ article h2.major:after {
 	article .image.main img {
 		width: 100%;
 		height: 100%;
+	}
+
+	.education-item {
+		flex-direction: column;
+		gap: 1em;
+	}
+
+	.education-icon-wrapper {
+		align-self: flex-start;
+	}
+
+	.education-degree {
+		font-size: 1.2em;
 	}
 
 	article h2.major {
